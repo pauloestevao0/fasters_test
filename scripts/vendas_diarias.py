@@ -25,9 +25,9 @@ vendas_diarias = vendas.groupBy("inicio_ligacao", "Líder da Equipe") \
     .agg(sum(col("Valor venda")).alias("total_vendas"))
 
 # gera parquet
-vendas_diarias.coalesce(1).write \ 
-    .partitionBy("Lider_da_Equipe") \ 
-    .mode("overwrite") \ 
+vendas_diarias.coalesce(1).write \
+    .partitionBy("Lider_da_Equipe") \
+    .mode("overwrite") \
     .parquet(output_dir)
 
 print(f"Tabela de vendas diárias gerada com sucesso.")
