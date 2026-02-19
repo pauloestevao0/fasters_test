@@ -17,17 +17,17 @@ pessoas = spark.read.csv("../files/base_pessoas.csv", header=True, inferSchema=T
 # join vendas-pessoas
 vendas = telefonia.join(pessoas, on="Username", how="left")
 
-# coluna sem espaco 
+# nome coluna sem espaco
 vendas = vendas.withColumn("Lider_da_Equipe", regexp_replace(col("Líder da Equipe"), " ", "_"))
 
-# group by data e lideranca
-vendas_diarias = vendas.groupBy("inicio_ligacao", "Líder da Equipe") \
+# group by data elideranca
+vendas_diarias = vendas.groupBy("inicio_ligacao", "Lider_da_Equipe") \
     .agg(sum(col("Valor venda")).alias("total_vendas"))
 
 # gera parquet
-vendas_diarias.coalesce(1).write \ 
-    .partitionBy("Lider_da_Equipe") \ 
-    .mode("overwrite") \ 
+vendas_diarias.coalesce(1).write \
+    .partitionBy("Lider_da_Equipe") \
+    .mode("overwrite") \
     .parquet(output_dir)
 
 print(f"Tabela de vendas diárias gerada com sucesso.")
